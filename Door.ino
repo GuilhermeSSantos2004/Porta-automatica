@@ -9,6 +9,8 @@ const int echoPinD2 = 5; //ECHO
 float distanceD1;
 float distanceD2;
 
+int count = -1; 
+
 Servo servo1; //cria um novo objeto servo
 
 void setup() {
@@ -29,12 +31,18 @@ void loop() {
  SensorD1();
  SensorD2();
   
+// delay(1200);
+ Serial.print("Quantidade de veses que a porta foi aberta: ");
+ Serial.print(count);
+ Serial.println();
+  
 }
 void OpenDoor(){
   
   if (distanceD1 <= 30.00 || distanceD2 <= 30.00){
     Serial.print("----");
     servo1.write(90);  
+    count +=1;
   }
   else {
     Serial.print("---");

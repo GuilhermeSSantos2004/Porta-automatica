@@ -13,6 +13,8 @@ int count = -1;
 
 Servo servo1; //cria um novo objeto servo
 
+int incomingByte = 0; // for incoming serial data
+
 void setup() {
   Serial.begin(9600);
   pinMode(sensorPinD1, OUTPUT);
@@ -31,10 +33,45 @@ void loop() {
  SensorD1();
  SensorD2();
   
+ 
+  
+ if (Serial.available() > 0) {
+   
+   incomingByte = Serial.read();
+
+   //Serial.print("Eu recebi: ");
+   Serial.println(incomingByte, DEC);
+   
+   forceOpen();
+  }
+  
+  
+  
 // delay(1200);
  Serial.print("Quantidade de veses que a porta foi aberta: ");
  Serial.print(count);
  Serial.println();
+  
+}
+
+
+void forceOpen(){
+  
+  if (incomingByte == 49){
+    Serial.print("PORTA ABERTA");
+    Serial.print(incomingByte);
+    servo1.write(90);  
+    delay(5000);
+
+  }
+  else {
+    Serial.print("PORTA FECHADA");
+    Serial.print(incomingByte);
+    servo1.write(90);
+    delay(5000);
+    
+
+  }
   
 }
 void OpenDoor(){
@@ -49,6 +86,7 @@ void OpenDoor(){
     delay(2000);
     servo1.write(0);
   }
+  
 }
 
 

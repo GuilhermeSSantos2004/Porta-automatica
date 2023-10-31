@@ -1,5 +1,8 @@
 #include <Servo.h>
 
+#include "WiFi.h"             // WiFi Library 
+#include <HTTPClient.h>
+
 const int sensorPinD1 = 8; //TRIG
 const int echoPinD1 = 7; //ECHO
 
@@ -15,6 +18,18 @@ Servo servo1; //cria um novo objeto servo
 
 int incomingByte = 0; // for incoming serial data
 
+
+/* Configuração do Wi-Fi ---------------------------------------------------------*/
+
+char wifiSsid[] = "homepage"; // Nome da rede Wi-Fi
+char wifiPass[] = "carromoto";     // Senha da rede Wi-Fi
+
+char serverAddress[] = "https://api.tago.io/data";  // endereço TagoIO 
+char contentHeader[] = "application/json";
+char tokenHeader[]   = "048c70a2-0935-4521-88e1-33668ef60f1c"; // TagoIO Token
+
+HTTPClient client;
+
 void setup() {
   Serial.begin(9600);
   pinMode(sensorPinD1, OUTPUT);
@@ -24,6 +39,8 @@ void setup() {
   servo1.write(0);
   pinMode(sensorPinD2, OUTPUT);
   pinMode(echoPinD2, INPUT);
+
+  init_wifi(); //função para conectar no host
  
 }
 
@@ -44,7 +61,10 @@ void loop() {
    
    forceOpen();
   }
-  
+
+
+ EnviaDadosTago();
+
   
   
 // delay(1200);
@@ -54,6 +74,89 @@ void loop() {
   
 }
 
+/**
+
+   @Inicializa a conexão wifi
+
+*/
+
+void init_wifi(void) {
+
+  Serial.println("Conectando Wifi...");
+
+  Serial.print("SSID: ");
+
+  Serial.println(wifiSsid);
+
+  Serial.print("PASS: ");
+
+  Serial.println(wifiPass);
+
+  WiFi.begin(wifiSsid, wifiPass);
+
+  while (WiFi.status() != WL_CONNECTED) {
+
+    delay(500);
+
+    Serial.print(".");
+
+  }
+
+  Serial.println("WiFi Conectado!");
+
+  Serial.print("IP is ");
+
+  Serial.println(WiFi.localIP());
+
+}
+
+void EnviaDadosTago() {
+  
+  
+  char anyData[30];
+
+  char postData[300];
+
+  char anyData1[30];
+
+  char bAny[30];
+
+  int statusCode = 0;
+
+
+
+  strcpy(postData, "{\n\t\"variable\": \"Abertura porta\",\n\t\"value\": ");
+
+  dtostrf(count, 6, 2, anyData);
+
+  strncat(postData, anyData, 100);
+
+  strcpy(anyData1, ",\n\t\"unit\": \"ºC\"\n\t}\n");
+
+  strncat (postData, anyData1, 100);
+
+  Serial.println(postData);
+
+  client.begin(serverAddress);
+
+  client.addHeader("Content-Type", contentHeader);
+
+  client.addHeader("Device-Token", tokenHeader);
+
+  statusCode = client.POST(postData);
+
+
+
+  // read the status code and body of the response
+
+  Serial.print("Status code: ");
+
+  Serial.println(statusCode);
+
+  Serial.println("End of POST to TagoIO");
+
+  Serial.println();
+  }
 
 void forceOpen(){
   

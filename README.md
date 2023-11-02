@@ -37,5 +37,40 @@ Para identificar a presença das pessoas utilize Sensores de Proximidade.
 
 ![image](https://github.com/GuilhermeSSantos2004/Porta-automatica/assets/107642647/4e47ec88-23e7-481b-8d22-6d6c4b6fc6df)
 
-Link do video: 
+## Pré-requisitos
+
+Para utilizar este projeto, você precisará de:
+
+   #### HARDWARE  
+
+   - ESP32
+   - Cabo de dados e carga - Micro USB
+   - Dois sensores ultrassônicos
+   - Protoboard 830 Pontos
+   - 12 jumpers
+
+   #### SOFTWARE 
+
+   - Arduino IDE
+
+   
+___
+## Como executar o projeto
+
+Após a instalação do Arduíno IDE, você deve seguir os seguintes passos:
+
+1. Faça download do código da pasta "Código Fonte" deste repositório.
+2. Abra o código no Arduino IDE.
+3. Conecte os sensores e componentes de acordo com as instruções fornecidas no código.
+4. Faça o download da biblioteca ESP32, ESP32servo, WiFi.h e HTTPClient.h
+____
+
+## Modelo lógico  
+
+> Developing ⚠️
+
+## Video Explicativo
+Link do vídeo: 
+
+
 
